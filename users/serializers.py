@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import User
-# Roles
+from users.models import User, Roles
 from django.contrib.auth import authenticate
 
 
@@ -10,10 +9,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'login', 'name', 'email',)
 
 
-# class RolesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Roles
-#         fields = ('id', 'name',)
+class RolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Roles
+        fields = ('id', 'name',)
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

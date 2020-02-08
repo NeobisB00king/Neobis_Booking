@@ -6,11 +6,11 @@ class CategoryRoom(models.Model):
     name = models.CharField(max_length=20, verbose_name='Название категории')
     volume = models.CharField(max_length=20, verbose_name='Вместительность')
     special = models.TextField(verbose_name='Дополнительная информация')
-    price = models.IntegerField(max_length=20, verbose_name='Цена')
+    price = models.IntegerField(verbose_name='Цена')
 
     class Meta:
-        verbrose_name = 'Категория'
-        verbrose_name_plural = 'Категории'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
@@ -30,8 +30,8 @@ class Reservation(models.Model):
     special_request = models.TextField(verbose_name='Возможные пожелания')
 
     class Meta:
-        verbrose_name = 'Бронь'
-        verbrose_name_plural = 'Брони'
+        verbose_name = 'Бронь'
+        verbose_name_plural = 'Брони'
 
     def __str__(self):
         return self.name
@@ -42,11 +42,11 @@ class Room(models.Model):
     category = models.ForeignKey(CategoryRoom, on_delete=models.CASCADE, verbose_name='Тип номера', null=False)
     photos = models.ImageField(verbose_name='Фото')
     status = models.BooleanField(default=False, verbose_name='Статус')
-    reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True, verbrose_name='Бронь')
+    reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True, verbose_name='Бронь')
 
     class Meta:
-        verbrose_name = 'Комната'
-        verbrose_name_plural = 'Комнаты'
+        verbose_name = 'Комната'
+        verbose_name_plural = 'Комнаты'
 
     def __str__(self):
         return self.name

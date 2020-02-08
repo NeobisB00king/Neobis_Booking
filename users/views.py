@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from rest_framework import status, generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
-from .serializers import *
+from users.serializers import *
 from users.models import *
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
@@ -101,14 +100,14 @@ def login(request):
                     status=HTTP_200_OK)
 
 
-# class RolesViewSet(generics.ListCreateAPIView):
-#     queryset = Roles.objects.all()
-#     serializer_class = RolesSerializer
+class RolesViewSet(generics.ListCreateAPIView):
+    queryset = Roles.objects.all()
+    serializer_class = RolesSerializer
 
 
-# class RolesDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Roles.objects.all()
-#     serializer_class = RolesSerializer
+class RolesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Roles.objects.all()
+    serializer_class = RolesSerializer
 
 
 class UserViewSet(generics.ListCreateAPIView):
@@ -119,4 +118,3 @@ class UserViewSet(generics.ListCreateAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-# Create your views here.

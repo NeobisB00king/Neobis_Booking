@@ -10,15 +10,15 @@ from datetime import datetime, timedelta
 from django.conf import settings
 
 
-# class Roles(models.Model):
-#     name = models.CharField(max_length=100, verbose_name='Название')
-#
-#     class Meta:
-#         verbose_name = 'Должность'
-#         verbose_name_plural = 'Должности'
-#
-#     def __str__(self):
-#         return self.name
+class Roles(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Название')
+
+    class Meta:
+        verbose_name = 'Должность'
+        verbose_name_plural = 'Должности'
+
+    def __str__(self):
+        return self.name
 
 
 class UserManager(BaseUserManager):
@@ -52,7 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, max_length=50, unique=True, verbose_name='Email')
     name = models.CharField(max_length=100, blank=True, verbose_name='Имя')
     surname = models.CharField(max_length=100, blank=True, verbose_name='Фамилия')
-    # roles = models.ForeignKey(Roles, on_delete=models.CASCADE, verbose_name='Должность', null=True)
+    roles = models.ForeignKey(Roles, on_delete=models.CASCADE, verbose_name='Должность', null=True)
     phone = models.CharField(max_length=100, verbose_name='Телефон')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
