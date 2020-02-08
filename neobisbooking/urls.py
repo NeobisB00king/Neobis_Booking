@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from users.views import *
 from booking.views import *
+from feedback.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,4 +38,6 @@ urlpatterns += [
     path('reservations/<int:pk>', ReservationDetailView.as_view()),
     path('rooms', RoomViewSet.as_view()),
     path('rooms/<int:pk>', RoomDetailView.as_view()),
+    path('feedback', FeedbackView.as_view(), name='Feedback'),
 ]
+

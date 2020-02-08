@@ -34,7 +34,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed()
 
         try:
-            user = User.objects.get(pk=payload['id'])
+            user = User.objects.get()
         except:
             raise exceptions.AuthenticationFailed()
 
