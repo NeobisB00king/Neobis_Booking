@@ -7,5 +7,6 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
-    path('feedback', FeedbackView.as_view(), name='Feedback'),
-]
+    path('feedback', HomeView.as_view(), name='Feedback'),
+    path('img', ImageUploadView.as_view(), name='ImageUpload'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

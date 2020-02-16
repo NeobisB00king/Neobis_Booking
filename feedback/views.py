@@ -5,23 +5,35 @@ from django.core import mail
 from django.conf import settings
 
 
-from feedback.models import AdminEmail
-from .forms import *
+from .forms import IndexForm
+from .models import AdminEmail
+
+#Images upload imports
+from django.forms import modelformset_factory
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from .models import Images
+
 # Create your views here.
 
-
-class FeedbackView(TemplateView):
+class HomeView(TemplateView):
     name = 'feedback/feedback.html'
 
-    def get(self, request, **kwargs):
-        form = FeedbackForm()
-        return render(request, self.name, {'form': form})
+    def get(self, request):
+        form = IndexForm()
+        imageFormSet = modelformset_factory(Images, fields=('image', ))
+        imageForm = imageFormSet()
+        return render(request, self.name, {'form': form, 'imageForm': imageForm, })
 
     def post(self, request):
-        form = FeedbackForm(request.POST)
+        #Email start -----------------------------------------
+        form = IndexForm(request.POST)
         if form.is_valid():
             # form.save()
 
+
+            
             connection = mail.get_connection()
             connection.open()
 
@@ -46,9 +58,31 @@ class FeedbackView(TemplateView):
             print("Email (now) successfully sent!")
 
             connection.close()
-
+            
         context = {
             'form': form,
         }
-
         return render(request, self.name, context)
+
+        #Email end -----------------------------------------
+
+
+class ImageUploadView(TemplateView):
+    name = 'feedback/imageUpload.html'
+
+    def get(self, request):
+        imageFormSet = modelformset_factory(Images, fields=('image', ))
+        form = imageFormSet()
+        return render(request, self.name, {'form': form, })
+
+    def post(self, request):
+        #Load multiple images start -----------------------------------------
+        if request.method == 'POST':
+            imageFormSet = modelformset_factory(Images, fields=('image', ))
+            form = imageFormSet(request.POST, request.FILES)
+
+            if form.is_valid():
+                form.save()
+
+            return render(request, self.name, {'form': form, })
+        #Load multiple images end -----------------------------------------

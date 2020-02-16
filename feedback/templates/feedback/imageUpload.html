@@ -7,14 +7,14 @@
     <title>Feedback</title>
 </head>
 <body>
-<a href="{% url 'ImageUpload' %}">Go to image upload</a>
-    <div class="">
-        <h1 class=""><b>Feedback</b></h1>
+<a href="{% url 'Feedback' %}">Go to feedback</a>
+    <form method="post" enctype="multipart/form-data">
+        <h1 class=""><b>Images</b></h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="">Send</button>
-        </form>
-    </div>
+    <input type="submit" name="submit" value="Upload" />
+    </form>
+
 </body>
 </html>
