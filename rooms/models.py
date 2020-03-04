@@ -41,13 +41,34 @@ class PayStatuses(models.Model):
     pay_status = models.CharField(max_length=20)
 
 
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reserved_start_date = models.DateTimeField(default=timezone.now)
+    reserved_end_date = models.DateTimeField()
+    num_of_people = models.IntegerField(default=1)
+#   room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    status = models.ForeignKey(ReservationStatuses, on_delete=models.SET_NULL)
+    updated_datetime = models.DateTimeField(auto_now=True)
+    user_comments = models.ForeignKey(UserComments, on_delete=models.SET_NULL)
+    pay_status = models.ForeignKey(PayStatuses, on_delete=models.SET_NULL())
+
+    # def __str__(self):
+    #     return "%s  %s  (%s to %s)" % (self.user.get_full_name(),
+    #                                    self.get_status_display(),
+    #                                    self.reserved_start_date.strftime(
+    #         "%Y/%m/%d %H:%S"),
+    #         self.reserved_end_date.strftime(
+    #         "%Y/%m/%d %H:%S"),
+    #     )
+
+
 class Room(models.Model):
 
-    # reservation = models.ForeignKey(Reservation,  on_delete=models.CASCADE)
+    reservation = models.ForeignKey(Reservation,  on_delete=models.CASCADE)
     category = models.ForeignKey(CategoryRoom, on_delete=models.CASCADE)
     volume = models.ForeignKey(VolumeCategoryRoom, on_delete=models.CASCADE)
     is_booked = models.BooleanField(default=False)
-#    booked_from = models.()
+    booked_from = models.ForeignKey(Reservation, on_delete=models.SET_NULL)
 #    booked_to = models.() need  to ralize that with forms
     is_taken = models.BooleanField(default=False)
 #    images import with pillow images model
@@ -63,27 +84,6 @@ class Room(models.Model):
     #
     # def __str__(self):
     #     return "%.2f ) %s" % (self.amount, self.content_object)
-
-
-class Reservation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reserved_start_date = models.DateTimeField(default=timezone.now)
-    reserved_end_date = models.DateTimeField()
-    num_of_people = models.IntegerField(default=1)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    status = models.ForeignKey(ReservationStatuses, on_delete=models.SET_NULL)
-    updated_datetime = models.DateTimeField(auto_now=True)
-    user_comments = models.ForeignKey(UserComments, on_delete=models.SET_NULL)
-    pay_status = models.ForeignKey(PayStatuses, on_delete=models.SET_NULL())
-
-    # def __str__(self):
-    #     return "%s  %s  (%s to %s)" % (self.user.get_full_name(),
-    #                                    self.get_status_display(),
-    #                                    self.reserved_start_date.strftime(
-    #         "%Y/%m/%d %H:%S"),
-    #         self.reserved_end_date.strftime(
-    #         "%Y/%m/%d %H:%S"),
-    #     )
 
 
 class ReservationToken(models.Model):
