@@ -11,6 +11,10 @@ auth_user = settings.AUTH_USER_MODEL if getattr(
     settings, "AUTH_USER_MODEL") else User
 
 
+class UserComments(models.Model):
+    text = models.TextField()
+
+
 class Reservation(models.Model):
     BUILDING = 0
     REQUESTED = 1
@@ -31,6 +35,8 @@ class Reservation(models.Model):
     reserved_end_date = models.DateTimeField()
     status = models.SmallIntegerField(choices=STATUS, default=BUILDING)
     updated_datetime = models.DateTimeField(auto_now=True)
+    user_comments = models.ForeignKey(UserComments, on_delete=models.SET_NULL)
+
 
     def __str__(self):
         return "%s  %s  (%s to %s)" % (self.user.get_full_name(),
@@ -65,9 +71,7 @@ class Product(models.Model):
         return "%.2f ) %s" % (self.amount, self.content_object)
 
 
-class Observation(models.Model):
-    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
-    text = models.TextField()
+
 
 
 class ReservationToken(models.Model):
