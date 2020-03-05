@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404,\
     redirect
 from django.views.generic.edit import CreateView
-from .models import Product, Reservation, ReservationToken
-from .forms import ProductForm, ReservationForm
+from .models import Room, Reservation, ReservationToken
+from .forms import RoomForm, ReservationForm
 from django.http.response import HttpResponseRedirect, Http404
 try:
     from django.core.urlresolvers import reverse
@@ -97,7 +97,7 @@ def finish_reservation(request):
     return response
 
 
-class SimpleProductReservation(CreateView):
+class SimpleRoomReservation(CreateView):
     model = Reservation
     form_class = ReservationForm
     success_url = "/"
@@ -106,7 +106,7 @@ class SimpleProductReservation(CreateView):
     max_amount_field = None
     extra_display_field = None
     template_name = 'djreservation/simple_reservation.html'
-    product_form_class = ProductForm
+    product_form_class = RoomForm
     product_form = None
 
     def get_product_form(self, instance, post_context=False):
@@ -145,9 +145,9 @@ class SimpleProductReservation(CreateView):
 
         reservation = form.save(commit=False)
         reservation.user = self.request.user
-        reservation.status = Reservation.REQUESTED
+        # reservation.status = Reservation.REQUESTED
         reservation.save()
-        self.object = Product(
+        self.object = Room(
             amount=self.product_form.cleaned_data['amount'],
             amount_field=self.amount_field,
             reservation=reservation,
@@ -169,7 +169,7 @@ class SimpleProductReservation(CreateView):
 
         self.pk = kwargs.pop('pk')
         self.product_form = self.product_form_class()
-        return super(SimpleProductReservation, self).get(
+        return super(SimpleRoomReservation, self).get(
             request, *args, **kwargs
         )
 
@@ -186,11 +186,11 @@ class SimpleProductReservation(CreateView):
 
 
 class ProductReservationView(CreateView):
-    model = Product
+    model = Room
     base_model = None
     amount_field = None
     extra_display_field = None
-    form_class = ProductForm
+    form_class = RoomForm
     success_url = "/"
 
     def get_success_view(self):
@@ -222,7 +222,7 @@ class ProductReservationView(CreateView):
         return context
 
     def form_valid(self, form):
-        self.object = Product(
+        self.object = Room(
             amount=form.cleaned_data['amount'],
             amount_field=self.amount_field,
             reservation=self.request.reservation,
@@ -257,7 +257,7 @@ class ProductReservationView(CreateView):
 
 
 def deleteProduct(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    product = get_object_or_404(Room, pk=pk)
     product.delete()
     messages.success(request, _('Product deleted successful'))
     return redirect(reverse("finish_reservation"))

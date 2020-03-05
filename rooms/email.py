@@ -5,12 +5,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from django.conf import settings
 
-BUILDING = Reservation.BUILDING
-REQUESTED = Reservation.REQUESTED
-ACCEPTED = Reservation.ACCEPTED
-DENIED = Reservation.DENIED
-BORROWED = Reservation.BORROWED
-RETURNED = Reservation.RETURNED
+# BUILDING = Reservation.BUILDING
+# REQUESTED = Reservation.REQUESTED
+# ACCEPTED = Reservation.ACCEPTED
+# DENIED = Reservation.DENIED
+# BORROWED = Reservation.BORROWED
+# RETURNED = Reservation.RETURNED
 
 
 def send_html_email(subject, template, context=None):

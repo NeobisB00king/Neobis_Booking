@@ -1,4 +1,4 @@
-from booking.rooms.views import ProductReservationView
+from .views import ProductReservationView
 from django.conf.urls import url
 
 

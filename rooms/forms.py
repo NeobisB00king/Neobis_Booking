@@ -3,7 +3,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Product, Reservation
+from .models import Room, Reservation
 
 
 class ReservationForm(forms.ModelForm):
@@ -21,12 +21,12 @@ class ReservationForm(forms.ModelForm):
         exclude = ['user', 'status']
 
 
-class ProductForm(forms.ModelForm):
+class RoomForm(forms.ModelForm):
     model_instance = forms.CharField(widget=forms.HiddenInput)
     available_amount = forms.FloatField(widget=forms.HiddenInput)
 
     def clean(self):
-        cleaned_data = super(ProductForm, self).clean()
+        cleaned_data = super(RoomForm, self).clean()
 
         if cleaned_data['amount'] <= 0:
             raise forms.ValidationError(
@@ -37,5 +37,5 @@ class ProductForm(forms.ModelForm):
                 _("You requested more than product available"))
 
     class Meta:
-        model = Product
+        model = Room
         fields = ['amount']

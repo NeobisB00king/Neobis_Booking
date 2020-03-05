@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from booking.rooms.email import send_reservation_email
-from booking.rooms.models import Reservation
+from .email import send_reservation_email
+from .models import Reservation
 
 
 @receiver(pre_save, sender=Reservation)

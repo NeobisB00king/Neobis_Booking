@@ -5,14 +5,14 @@ from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
 from .email import send_reservation_email
-from .models import Reservation, Observation, Product
+from .models import Reservation, UserComments, Room
 from .product_manager import proccess_reservation
 
 # Register your models here.
 
 
-class ObservationInline(admin.StackedInline):
-    model = Observation
+class CommentsInline(admin.StackedInline):
+    model = UserComments
     #fields = '__all__'
     extra = 0
 
@@ -40,7 +40,7 @@ class ReservationAdmin(admin.ModelAdmin):
         'user', 'status', "reserved_start_date", "reserved_end_date"]
     list_filter = ['status']
     search_fields = ['user__firstname', "user__lastname"]
-    inlines = [ObservationInline]
+    inlines = [CommentsInline]
     date_hierarchy = 'reserved_start_date'
     fieldsets = (
         (None, {

@@ -1,4 +1,4 @@
-from booking.rooms.models import Reservation
+from .models import Reservation
 
 
 class ReservationMiddleware(object):

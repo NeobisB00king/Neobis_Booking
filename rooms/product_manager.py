@@ -2,15 +2,15 @@ from .models import Reservation
 
 
 def proccess_reservation(obj, differ_obj, change_status):
-    if obj.status == Reservation.BUILDING or obj.status == Reservation.REQUESTED:
+    if obj.status == Reservation.BUILDING or obj.status == Reservation.REQUESTED: # Need to testing again
         return
-    if obj.status == Reservation.ACCEPTED:
+    if obj.status == Reservation.ACCEPTED: # Need to testing again
         accepted_reservation(obj, differ_obj, change_status)
-    elif obj.status == Reservation.DENIED:
+    elif obj.status == Reservation.DENIED: # Need to testing again
         denied_reservation(obj, differ_obj, change_status)
-    elif obj.status == Reservation.BORROWED:
+    elif obj.status == Reservation.BORROWED: # Need to testing again
         borrowed_reservation(obj, differ_obj, change_status)
-    elif obj.status == Reservation.RETURNED:
+    elif obj.status == Reservation.RETURNED: # Need to testing again
         returned_reservation(obj, differ_obj, change_status)
 
 
