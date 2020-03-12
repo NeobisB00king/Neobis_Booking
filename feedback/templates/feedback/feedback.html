@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Feedback</title>
+</head>
+<body>
+<a href="{% url 'ImageUpload' %}">Go to image upload</a>
+    <div class="">
+        <h1 class=""><b>Feedback</b></h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="">Send</button>
+        </form>
+    </div>
+</body>
+</html>
