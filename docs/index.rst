@@ -8,6 +8,7 @@ Neobis Booking's documentation
    accounts
    rooms
    feedback
+   imagedownload
 
 Genetal info:
 *************
