@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ==================Search================== -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+
+            <form method="POST" enctype="multipart/form-data" name="search" onsubmit="return validateForm()">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <input class="form-control text-capitalize" type="text" name="searchterm" id="checkin" placeholder="where are you going?" required>
+
+                </div>
+
+                <!-- Multi Date, Date Picker -->
+                <div class="form-group">
+                    <input class="date form-control" type="text" name="daterange" id="checkin" placeholder="Select Date" required>
+
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+  <script src="https://unpkg.com/flatpickr"></script>
+
+  <script>
+
+  flatpickr(".date", {
+
+	minDate: "today",
+  mode:"range",
+
+});
+
+function validateForm() {
+  var setdate = document.forms["search"]["daterange"].value;
+  if(setdate == ""){
+    alert("Date Must be Filled Out");
+    return false;
+  }
+}
+
+
+
+
+</script>
+{% endblock %}
