@@ -6,6 +6,7 @@ Neobis Booking's documentation
    :caption: Contents:
 
    accounts
+   booking
    rooms
    feedback
    imagedownload

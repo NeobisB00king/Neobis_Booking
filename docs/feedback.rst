@@ -12,13 +12,13 @@ admin email witch is set in admin panel.
 The form looks something like this:
 
 +--------+--------+
-|name    |   -    |
+|name    |        |
 +--------+--------+
-|email   |   -    |
+|email   |        |
 +--------+--------+
-|subject |   -    |
+|subject |        |
 +--------+--------+
-|message |   -    |
+|message |        |
 +--------+--------+
 
 After user fills up the form it is edited to look like this for
