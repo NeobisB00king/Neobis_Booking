@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'feedback',
     # 'rooms',
+    'bookingg'
 ]
 
 MIDDLEWARE = [

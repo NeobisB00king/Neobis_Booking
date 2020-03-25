@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Room Name</th>
+      <th scope="col">Capacity</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+    {% for room in rooms %}
+  <tbody>
+    <tr>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'>{{ forloop.counter }}</td>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'><a href="{% url 'room_details' room.pk %}">{{ room.name }}</a></td>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'>{{ room.capacity }}</td>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'>{{ room.has_projector }}</td>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'>{{ status }}</td>
+      <td bgcolor='{% cycle "#f8f9fa" "#fff" %}'>
+        <a href="{% url 'booking' room.pk %}"><button class="btn btn-outline-success">Book</button></a>
+        <a href="{% url 'room_update' room.pk %}"><button class="btn btn-warning">Edit</button></a>
+        <a href="{% url 'delete_room' room.pk %}"><button class="btn btn-outline-danger">Delete</button></a>
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %}
+{% endblock %}
+
