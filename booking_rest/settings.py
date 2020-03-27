@@ -59,10 +59,9 @@ MIDDLEWARE = [
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.BasicAuthentication',  # Авторизация через сессии Django
+#         'rest_framework.authentication.SessionAuthentication',  # Авторизация через сессии Django
 #     ),
 #     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.AllowAny',
 #         'rest_framework.permissions.DjangoObjectPermissions'  # Доступ к объектам через Django
 #     ],
 #     'DEFAULT_RENDERER_CLASSES': (
@@ -75,10 +74,19 @@ MIDDLEWARE = [
 #     'PAGE_SIZE': 10,
 # }
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',),
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',
+#                                    'rest_framework.permissions.DjangoObjectPermissions',
+#                                    ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',),
+#     'DEFAULT_RENDERER_CLASSES': (
+#         'rest_framework.renderers.JSONRenderer',
+#         'rest_framework.renderers.BrowsableAPIRenderer',  # Если надо через браузер вручную удобно дёргать api
+#     ),
+#     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 10,
+# }
 
 ROOT_URLCONF = 'booking_rest.urls'
 
@@ -159,7 +167,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'neobis.b00k1ng@gmail.com'
-EMAIL_HOST_PASSWORD = 'kdsyxccrlcjfkjbi'
+EMAIL_HOST_PASSWORD = 'isvhiqvxzvodubtp'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 # Heroku: Update database configuration from $DATABASE_URL.
