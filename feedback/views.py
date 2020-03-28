@@ -23,11 +23,11 @@ class MailView(viewsets.ModelViewSet):
         serializer = self.serializer_class(departments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, **kwargs):
+    def create(self, request, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            connection = mail.get_connection()
-            connection.open()
+            # connection = mail.get_connection()
+            # connection.open()
             name = serializer.data['name']
             email = serializer.data['email']
             subjectForm = serializer.data['subject']
@@ -38,12 +38,12 @@ class MailView(viewsets.ModelViewSet):
             obj = AdminEmail.objects.first()
             admin_email = getattr(obj, field_name)
             recipient_list = [admin_email, ]
-            send_mail(subject, message, email_from, recipient_list,
-                      connection=connection, fail_silently=False)
-            print("Email (now) successfully sent!")
-            connection.close()
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save()
+            # send_mail(subject, message, email_from, recipient_list,
+            #           connection=connection, fail_silently=False)
+            send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+            print('send_email', send_mail)
+            print('Письмо отправлено')
+            # connection.close()
         messages.success(request, f'Письмо успешно отправлено!')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['radiant-fjord-27627.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['radiant-fjord-27627.herokuapp.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -166,8 +166,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'neobis.b00k1ng@gmail.com'
-EMAIL_HOST_PASSWORD = 'isvhiqvxzvodubtp'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 # Heroku: Update database configuration from $DATABASE_URL.
