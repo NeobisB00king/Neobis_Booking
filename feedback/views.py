@@ -46,5 +46,5 @@ class MailView(viewsets.ModelViewSet):
             print('Письмо отправлено')
             connection.close()
         messages.success(request, f'Письмо успешно отправлено!')
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)    
 
