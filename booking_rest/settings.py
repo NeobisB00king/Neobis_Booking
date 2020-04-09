@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jet_django',
     'feedback',
     'booking',
     'rest_framework',
@@ -178,3 +179,7 @@ FILE_UPLOAD_PERMISSIONS=0o640
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+JET_PROJECT = 'neobis_booking'
+JET_TOKEN = 'da59a406-7fdb-4632-921e-d0c088584238'

@@ -36,7 +36,7 @@ class Room(models.Model):
     capacity = models.IntegerField()
     category = models.ManyToManyField(CategoryRoom, related_name='room_category')
     volume = models.ManyToManyField(VolumeRoom, related_name='room_volume')
-    images = models.ManyToManyField(RoomImages, null=True, blank=True)
+    images = models.ManyToManyField(RoomImages, blank=True)
 
     def __str__(self):
         return self.name

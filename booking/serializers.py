@@ -1,3 +1,5 @@
+import datetime
+
 from .models import *
 from rest_framework import serializers
 
@@ -27,36 +29,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ('id', 'name', 'price', 'capacity', 'category', 'volume', 'images')
-
-
-    # def create(self, validated_data):
-    #     volumes_data = validated_data.pop('volume')
-    #     room = Room.objects.create(**validated_data)
-    #     for volume_data in volumes_data:
-    #         CategoryRoom.objects.create(room=room, **volume_data)
-    #     return room
-
-    # def create(self, validated_data):
-    #     category_data = validated_data.pop('category')
-    #     volume_data = validated_data.pop('volume')
-    #     course = Room.objects.create(**validated_data)
-    #     category_list = []
-    #     volume_list = []
-    #     print(category_data)
-    #     print(volume_data)
-    #     for category_details in category_data:
-    #         category_list.append(models.Category.objects.create(
-    #             course_id=course.id,
-    #             **category_details
-    #         ))
-    #     for volume_details in volume_data:
-    #         volume_list.append(models.Volume.objects.create(
-    #             course_id=course.id,
-    #             **volume_details
-    #         ))
-    #     course.save()
-    #     return course
+        fields = ('id', 'name', 'price', 'capacity',
+                  'category', 'volume', 'images',)
 
 
 class BookingSerializer(serializers.ModelSerializer):
