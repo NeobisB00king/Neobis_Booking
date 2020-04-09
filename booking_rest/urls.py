@@ -27,7 +27,7 @@ router.register('feedback', MailView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('jet_api/', include('jet_django.urls')),
+    # path('jet_api/', include('jet_django.urls')),
     path('', include(router.urls)),
     path('rooms/<int:id>/book/', BookingDetailsView.as_view({'get': 'get', 'post': 'post'}), name='bookroom',),          # Передает параметр 'id' комнаты в вьюшку
     # path('feedback/', MailView.as_view({'get': 'list'}), name='feedback'),
