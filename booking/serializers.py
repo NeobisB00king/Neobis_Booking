@@ -42,12 +42,8 @@ class BookingSerializer(serializers.ModelSerializer):
                   'book_pay_status', 'has_child', 'clientName', 'clientSurname',
                   'clientEmail', 'clientPhone')
     def create(self, validated_data):
-        room_validated_data = validated_data.pop('room')
-        booking = Booking.objects.create(**validated_data)
-        room_set_serializer = self.fields['room']
-        for room in room_validated_data:
-            room['booking'] = booking
-        rooms = room_set_serializer.create(room_validated_data)
+        room = Room.objects.get(pk=validated_data.pop('name'))
+        booking = Booking.objects.create(**validated_data, room=room)
         return booking
 
 
