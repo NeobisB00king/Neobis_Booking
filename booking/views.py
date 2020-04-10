@@ -56,27 +56,27 @@ class BookingDetailsView(viewsets.ModelViewSet):
 
         #Edit request data to add room data to request
         
-        roomSerializer = self.serializer_room(Room.objects.get(pk=self.kwargs['id'])) #Find resired room by id
-        roomData = roomSerializer.data #Put room data inro a variable
+        # roomSerializer = self.serializer_room(Room.objects.get(pk=self.kwargs['id'])) #Find resired room by id
+        # roomData = roomSerializer.data #Put room data inro a variable
 
-        bookData = request.data #Take request data and put it into a varible to modify
-        _mutable = bookData._mutable
-        bookData._mutable = True
-        bookData['room'] = roomData
-        rightOrderList = ['csrfmiddlewaretoken', 'date_from', 'date_to', 'comment', 'book_status',
-                      'room', 'book_pay_status', 'clientName', 'clientSurname', 'clientEmail', 'clientPhone']
-        orderedBookData = dict()
-        orderedBookData = {k: bookData[k] for k in rightOrderList}
-        queryOrderedBookData = QueryDict('', mutable=True)
-        queryOrderedBookData.update(orderedBookData)
+        # bookData = request.data #Take request data and put it into a varible to modify
+        # _mutable = bookData._mutable
+        # bookData._mutable = True
+        # bookData['room'] = roomData
+        # rightOrderList = ['csrfmiddlewaretoken', 'date_from', 'date_to', 'comment', 'book_status',
+        #               'room', 'book_pay_status', 'clientName', 'clientSurname', 'clientEmail', 'clientPhone']
+        # orderedBookData = dict()
+        # orderedBookData = {k: bookData[k] for k in rightOrderList}
+        # queryOrderedBookData = QueryDict('', mutable=True)
+        # queryOrderedBookData.update(orderedBookData)
         
-        bookData = queryOrderedBookData
-        bookData._mutable = True
-        print(bookData)
+        # bookData = queryOrderedBookData
+        # bookData._mutable = True
+        # print(bookData)
 
         #End of editing request data
 
-        serializer = self.serializer_class(data=bookData)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         else:
