@@ -27,9 +27,9 @@ from decouple import config
 config.encoding = locale.getpreferredencoding(False)
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['radiant-fjord-27627.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['neobis-booking.herokuapp.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
