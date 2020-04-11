@@ -16,16 +16,16 @@ class VolumeRoomSerializer(serializers.ModelSerializer):
         fields = ('id', 'volume_name')
 
 
-class RoomImagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RoomImages
-        fields = ('id', 'image')
+# class RoomImagesSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RoomImages
+#         fields = ('id', 'image')
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    category = CategoryRoomSerializer(many=True)
-    volume = VolumeRoomSerializer(many=True)
-    images = RoomImagesSerializer(many=True)
+    category = CategoryRoomSerializer()
+    volume = VolumeRoomSerializer()
+    # images = RoomImagesSerializer()
 
     class Meta:
         model = Room
@@ -34,18 +34,14 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class BookingSerializer(serializers.ModelSerializer):
-    room = RoomSerializer(many=True)
+    room = serializers.SlugRelatedField(
+        queryset=Room.objects.all(), slug_field='name')
 
     class Meta:
         model = Booking
         fields = ('id', 'date_from', 'date_to', 'comment', 'book_status', 'room',
                   'book_pay_status', 'has_child', 'clientName', 'clientSurname',
                   'clientEmail', 'clientPhone')
-    def create(self, validated_data):
-        room_data = validated_data.pop('room')
-        booking = Booking.objects.get(**validated_data)
-        Booking.objects.create(**booking, room=room_data)
-        return booking
 
 
 

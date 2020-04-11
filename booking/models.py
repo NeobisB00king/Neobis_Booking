@@ -26,17 +26,17 @@ class VolumeRoom(models.Model):
         return self.volume_name
 
 
-class RoomImages(models.Model):
-    image = models.ImageField(null=True)
+# class RoomImages(models.Model):
+#     image = models.ImageField(null=True)
 
 
 class Room(models.Model):
     name = models.CharField(max_length=64)
     price = models.IntegerField(default=0, blank=False)
     capacity = models.IntegerField()
-    category = models.ManyToManyField(CategoryRoom, related_name='room_category')
-    volume = models.ManyToManyField(VolumeRoom, related_name='room_volume')
-    images = models.ManyToManyField(RoomImages, blank=True)
+    category = models.ForeignKey(CategoryRoom, default='', related_name='room_category', on_delete=models.CASCADE)
+    volume = models.ForeignKey(VolumeRoom, default='', related_name='room_volume', on_delete=models.CASCADE)
+    images = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -66,7 +66,7 @@ class Booking(models.Model):
         default=Not_confirmed,
     )
     book_date = models.DateTimeField(auto_now_add=True)
-    room = models.ManyToManyField(Room)
+    room = models.ForeignKey(Room, default='', on_delete=models.CASCADE)
     Paid = 'PA'
     Unpaid = 'UP'
     book_pay_status = models.CharField(
