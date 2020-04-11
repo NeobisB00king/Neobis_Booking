@@ -52,7 +52,9 @@ class BookingDetailsView(viewsets.ModelViewSet):
 
     def post(self, request, *args, **kwargs):
         model = self.queryset.all() #Booking model
-        roomModel = self.roomqueryset.filter(pk=kwargs['id']) #Room model
+
+        
+        # roomModel = self.roomqueryset.filter(pk=kwargs['id']) #Room model
 
         #Edit request data to add room data to request
         
@@ -75,6 +77,17 @@ class BookingDetailsView(viewsets.ModelViewSet):
         # print(bookData)
 
         #End of editing request data
+
+        # Check if room is taken
+
+        # dataToTest = request.data
+        # print(dataToTest)
+        # date_from = dataToTest.pop('date_from')
+        # room = dataToTest.pop('room')
+        # print(room)
+
+
+        # End of check for room
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
