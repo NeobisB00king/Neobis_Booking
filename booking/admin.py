@@ -7,6 +7,5 @@ admin.site.register(Room)
 admin.site.register(Booking)
 admin.site.register(CategoryRoom)
 admin.site.register(VolumeRoom)
-# admin.site.register(RoomIntermediate)
 # admin.site.register(RoomImages)
 
