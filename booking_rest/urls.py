@@ -21,7 +21,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('rooms', RoomViewSet)
-router.register('bookings', BookingDetailsView)
+# router.register('bookings', BookingDetailsView)
 router.register('feedback', MailView)
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     # path('jet_api/', include('jet_django.urls')),
     path('', include(router.urls)),
     # path('rooms/<int:id>/book/', BookingDetailsView.as_view({'get': 'get', 'post': 'post'}), name='bookroom',),          # Передает параметр 'id' комнаты в вьюшку
+    path('bookings/', BookingDetailsView.as_view({'get': 'get', 'post': 'post'}), name='bookroom',),          # Передает параметр 'id' комнаты в вьюшку
     # path('feedback/', MailView.as_view({'get': 'list'}), name='feedback'),
     # path('rooms/', RoomViewSet.as_view(), name='rooms',),
     # path('room/<int:pk>', RoomDetailsView.as_view(), name='room',),                 # Нужно указать id, т.е урл выглядит так: http://localhost:8000/room/1

@@ -1,4 +1,4 @@
-import datetime
+import datetime, re, json, six
 
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import render, get_object_or_404
@@ -12,6 +12,7 @@ from rest_framework.response import Response
 
 from .models import *
 from .serializers import *
+from .functions import test_for_date_validity
 # Create your views here.
 
 
@@ -53,46 +54,38 @@ class BookingDetailsView(viewsets.ModelViewSet):
     def post(self, request, *args, **kwargs):
         model = self.queryset.all() #Booking model
 
-        
-        # roomModel = self.roomqueryset.filter(pk=kwargs['id']) #Room model
+        requestData = request.data
+        roomName = requestData.__getitem__('room')
+        dateFrom = requestData.__getitem__('date_from')
+        dateFrom = datetime.datetime.strptime(dateFrom, "%Y-%m-%d").date()
+        print(dateFrom)
 
-        #Edit request data to add room data to request
-        
-        # roomSerializer = self.serializer_room(Room.objects.get(pk=self.kwargs['id'])) #Find resired room by id
-        # roomData = roomSerializer.data #Put room data inro a variable
+        bookingsIdList = list(Booking.objects.filter(room__name=roomName).values('id'))
+        idList = [None] * len(bookingsIdList)
+        datesList = [None] * len(bookingsIdList)
 
-        # bookData = request.data #Take request data and put it into a varible to modify
-        # _mutable = bookData._mutable
-        # bookData._mutable = True
-        # bookData['room'] = roomData
-        # rightOrderList = ['csrfmiddlewaretoken', 'date_from', 'date_to', 'comment', 'book_status',
-        #               'room', 'book_pay_status', 'clientName', 'clientSurname', 'clientEmail', 'clientPhone']
-        # orderedBookData = dict()
-        # orderedBookData = {k: bookData[k] for k in rightOrderList}
-        # queryOrderedBookData = QueryDict('', mutable=True)
-        # queryOrderedBookData.update(orderedBookData)
-        
-        # bookData = queryOrderedBookData
-        # bookData._mutable = True
-        # print(bookData)
+        for _ in range(len(bookingsIdList)):
+            temp = bookingsIdList[_]
+            idList[_] = temp.get('id')
 
-        #End of editing request data
-
-        # Check if room is taken
-
-        # dataToTest = request.data
-        # print(dataToTest)
-        # date_from = dataToTest.pop('date_from')
-        # room = dataToTest.pop('room')
-        # print(room)
+        for _ in range(len(bookingsIdList)):
+            temp = list(Booking.objects.filter(id=idList[_]).values('date_to'))
+            temp2 = temp[0]
+            datesList[_] = temp2.get('date_to')
 
 
-        # End of check for room
-
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        if re.search("^Success", str(test_for_date_validity(dateFrom, datesList))):
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, {"Success": "The booking has been created!"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"Fail": "Some error has occurred!"}, status=status.HTTP_400_BAD_REQUEST)
+        elif re.search("^Taken", str(test_for_date_validity(dateFrom, datesList))):
+            return Response({"Fail": "Room is already booked for this date!"}, status=status.HTTP_400_BAD_REQUEST)
+        elif re.search("^Invalid", str(test_for_date_validity(dateFrom, datesList))):
+            return Response({"Fail": "The date must be today or later!"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print('Serializer not saved, there is something wrong')
-        print(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"Fail": "Unexpected error has occured!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        
