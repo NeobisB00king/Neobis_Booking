@@ -16,7 +16,7 @@ from rest_framework.response import Response
 
 from .models import *
 from .serializers import *
-from .functions import test_for_date_validity
+from .functions import test_for_date_validity, send_email_to_customer
 # Create your views here.
 
 
@@ -65,8 +65,6 @@ class BookingDetailsView(viewsets.ModelViewSet):
 
         customerEmail = requestData.__getitem__('clientEmail')
         clientName = requestData.__getitem__('clientName')
-        # clientSurname = requestData.__getitem__('clientSurname')
-        # cliendFullName = clientName + ' ' + clientSurname
 
         dateFrom = datetime.datetime.strptime(dateFrom, "%Y-%m-%d").date()
 
@@ -83,28 +81,17 @@ class BookingDetailsView(viewsets.ModelViewSet):
             temp2 = temp[0]
             datesList[_] = temp2.get('date_to')
 
-
-        if re.search("^Success", str(test_for_date_validity(dateFrom, datesList))):
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                ###### Send email as the booking is created
-
-                name = clientName
-                subject = '{} спасибо за вашу бронь!'.format(name)
-                message = 'Ваш номер это - {}, вы забронировали с {} до {}. Приятного прибывания!'.format(
-                    roomName, dateFrom, dateTo)
-                email_from = settings.EMAIL_HOST_USER
-                recipient_list = []
-                recipient_list.append(customerEmail)
-                send_mail(subject, message, email_from, recipient_list, fail_silently=False)
-
-                ###### End of the send email function
-
-
-                serializer.save()
-                return Response(serializer.data, {"Success": "The booking has been created!"}, status=status.HTTP_201_CREATED)
-            else:
-                return Response({"Fail": "Some error has occurred!"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        if re.search("^Success", str(test_for_date_validity(dateFrom, datesList))) and serializer.is_valid(raise_exception=True):
+            serializer.save()
+            send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail)
+            return Response({
+                'serializer': serializer.data, 
+                "Success": "The booking has been created!",
+                'status': status.HTTP_201_CREATED,
+            }
+            )
+                
         elif re.search("^Taken", str(test_for_date_validity(dateFrom, datesList))):
             return Response({"Fail": "Room is already booked for this date!"}, status=status.HTTP_400_BAD_REQUEST)
         elif re.search("^Invalid", str(test_for_date_validity(dateFrom, datesList))):

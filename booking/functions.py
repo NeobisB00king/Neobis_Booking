@@ -1,5 +1,9 @@
 import datetime, random, re
 
+from django.core.mail import send_mail
+from django.core import mail
+from django.conf import settings
+
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -70,3 +74,15 @@ def test_for_date_validity(dateFrom, datesList):
                         return('Success')
                     else:
                         continue
+
+
+def send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail):
+
+    subject = '{} спасибо за вашу бронь!'.format(clientName)
+    message = 'Ваш номер это - {}, вы забронировали с {} до {}. Приятного прибывания!'.format(
+        roomName, dateFrom, dateTo)
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = []
+    recipient_list.append(customerEmail)
+    send_mail(subject, message, email_from,
+              recipient_list, fail_silently=False)

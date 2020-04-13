@@ -1,17 +1,6 @@
 from django.db import models
 
 
-# class Client(models.Model):
-#     name = models.CharField(max_length=64)
-#     surname = models.CharField(max_length=64)
-#     email = models.CharField(max_length=100)
-#     phone = models.IntegerField()
-
-#     def __str__(self):
-#         fullName = self.name + ' ' + self.surname
-#         return fullName
-
-
 class CategoryRoom(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название категории')
 
@@ -34,14 +23,9 @@ class VolumeRoom(models.Model):
         return self.volume_name
 
 
-# class RoomImages(models.Model):
-#     image = models.ImageField(null=True)
-
-
 class Room(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название комнаты')
     price = models.IntegerField(default=0, blank=False, verbose_name='Цена')
-    # capacity = models.IntegerField(verbose_name='Вместительность категории')
     category = models.ForeignKey(CategoryRoom, default='', related_name='room_category', on_delete=models.CASCADE, verbose_name='Название категории')
     volume = models.ForeignKey(VolumeRoom, default='', related_name='room_volume', on_delete=models.CASCADE, verbose_name='Вместительность категории')
     images = models.ImageField(null=True, blank=True, verbose_name='Вместительность категории')
@@ -99,8 +83,6 @@ class Booking(models.Model):
         verbose_name_plural = 'Брони'
 
     def __str__(self):
-        # room = get_object_or_404(Room, pk=id)
-        # room = Room.objects.filter(pk__in=self.room).
         name = self.clientName + ' ' + self.clientSurname
         email = self.clientEmail
         booking = name + ', ' + email
