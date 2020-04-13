@@ -1,5 +1,9 @@
 import datetime, re, json, six
 
+from django.core.mail import send_mail
+from django.core import mail
+from django.conf import settings
+
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import render, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -57,8 +61,14 @@ class BookingDetailsView(viewsets.ModelViewSet):
         requestData = request.data
         roomName = requestData.__getitem__('room')
         dateFrom = requestData.__getitem__('date_from')
+        dateTo = requestData.__getitem__('date_to')
+
+        customerEmail = requestData.__getitem__('clientEmail')
+        clientName = requestData.__getitem__('clientName')
+        # clientSurname = requestData.__getitem__('clientSurname')
+        # cliendFullName = clientName + ' ' + clientSurname
+
         dateFrom = datetime.datetime.strptime(dateFrom, "%Y-%m-%d").date()
-        print(dateFrom)
 
         bookingsIdList = list(Booking.objects.filter(room__name=roomName).values('id'))
         idList = [None] * len(bookingsIdList)
@@ -77,6 +87,20 @@ class BookingDetailsView(viewsets.ModelViewSet):
         if re.search("^Success", str(test_for_date_validity(dateFrom, datesList))):
             serializer = self.serializer_class(data=request.data)
             if serializer.is_valid(raise_exception=True):
+                ###### Send email as the booking is created
+
+                name = clientName
+                subject = '{} спасибо за вашу бронь!'.format(name)
+                message = 'Ваш номер это - {}, вы забронировали с {} до {}. Приятного прибывания!'.format(
+                    roomName, dateFrom, dateTo)
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = []
+                recipient_list.append(customerEmail)
+                send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+
+                ###### End of the send email function
+
+
                 serializer.save()
                 return Response(serializer.data, {"Success": "The booking has been created!"}, status=status.HTTP_201_CREATED)
             else:
