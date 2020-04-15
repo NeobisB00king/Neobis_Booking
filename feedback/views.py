@@ -1,88 +1,50 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
 from django.core.mail import send_mail
 from django.core import mail
 from django.conf import settings
-
-
-from .forms import IndexForm
-from .models import AdminEmail
-
-#Images upload imports
-from django.forms import modelformset_factory
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from .models import Images
-
 # Create your views here.
 
-class HomeView(TemplateView):
-    name = 'feedback/feedback.html'
 
-    def get(self, request):
-        form = IndexForm()
-        imageFormSet = modelformset_factory(Images, fields=('image', ))
-        imageForm = imageFormSet()
-        return render(request, self.name, {'form': form, 'imageForm': imageForm, })
-
-    def post(self, request):
-        #Email start -----------------------------------------
-        form = IndexForm(request.POST)
-        if form.is_valid():
-            # form.save()
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Mail, AdminEmail
+from .serializers import MailSerializer
+from django.core.mail import EmailMessage
 
 
-            
+class MailView(viewsets.ModelViewSet):
+    queryset = Mail.objects.all()
+    serializer_class = MailSerializer
+
+    def get(self, **kwargs):
+        departments = self.queryset.all()
+        serializer = self.serializer_class(departments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
             connection = mail.get_connection()
             connection.open()
-
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            subjectForm = form.cleaned_data['subject']
-
+            name = serializer.data['name']
+            email = serializer.data['email']
+            subjectForm = serializer.data['subject']
             subject = 'Имя - "{}", Email - "{}", Тема - "{}"'.format(name, email, subjectForm)
-            message = form.cleaned_data['message']
-
+            message = serializer.data['message']
             email_from = settings.EMAIL_HOST_USER
-
             field_name = 'email'
-            obj = AdminEmail.objects.first()
-            adminEmail = getattr(obj, field_name)
-
-            recipient_list = [adminEmail, ]
-
+            obj = AdminEmail.objects.filter().values_list('email', flat=True)
+            objLen = len(obj)
+            recipient_list = [None] * objLen
+            for _ in range(objLen):
+                recipient_list[_] = obj[_]
             send_mail(subject, message, email_from, recipient_list,
                       connection=connection, fail_silently=False)
-
-            print("Email (now) successfully sent!")
-
+            print('send_email', send_mail)
+            print('Письмо отправлено')
             connection.close()
-            
-        context = {
-            'form': form,
-        }
-        return render(request, self.name, context)
+        messages.success(request, f'Письмо успешно отправлено!')
+        return Response(serializer.data, status=status.HTTP_201_CREATED)    
 
-        #Email end -----------------------------------------
-
-
-class ImageUploadView(TemplateView):
-    name = 'feedback/imageUpload.html'
-
-    def get(self, request):
-        imageFormSet = modelformset_factory(Images, fields=('image', ))
-        form = imageFormSet()
-        return render(request, self.name, {'form': form, })
-
-    def post(self, request):
-        #Load multiple images start -----------------------------------------
-        if request.method == 'POST':
-            imageFormSet = modelformset_factory(Images, fields=('image', ))
-            form = imageFormSet(request.POST, request.FILES)
-
-            if form.is_valid():
-                form.save()
-
-            return render(request, self.name, {'form': form, })
-        #Load multiple images end -----------------------------------------
