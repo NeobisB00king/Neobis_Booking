@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     'feedback',
     'booking',
     'rest_framework',
-    'django_filters'
+    'django_filters',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -59,6 +61,26 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+# CORS_ORIGIN_WHITELIST = [
+#     # "https://example.com",
+#     # "https://sub.example.com",
+#     # "http://localhost:8080",
+#     "http://127.0.0.1:8000",
+#     "http://booking-site.herokuapp.com/",
+#     "http://neobis-booking.herokuapp.com/",
+#
+# ]
+#
+# CORS_ALLOW_METHODS = [
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# ]
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -191,3 +213,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 JET_PROJECT = 'neobis_booking'
 JET_TOKEN = 'da59a406-7fdb-4632-921e-d0c088584238'
+
+CORS_ORIGIN_ALLOW_ALL = True
