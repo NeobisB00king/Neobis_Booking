@@ -77,6 +77,9 @@ class Booking(models.Model):
     clientSurname = models.CharField(max_length=64, verbose_name='Фамилия клиента')
     clientEmail = models.EmailField(verbose_name='Email клиента')
     clientPhone = models.IntegerField(verbose_name='Номер телефона клиента')
+    totalsum = models.IntegerField(verbose_name='Полная стоимость', default=0)
+    room_category_stats = models.CharField(verbose_name='Категория комнаты для статистики', max_length=64,
+                                           blank=True, default='')
 
     class Meta:
         verbose_name = 'Бронь'
@@ -88,5 +91,18 @@ class Booking(models.Model):
         booking = name + ', ' + email
         return booking
 
+    def save(self, *args, **kwargs):
+        self.totalsum += self.room.price
+        # self.totalsum.save()
+        self.room_category_stats += self.room.category.name
+        super(Booking, self).save(*args, **kwargs)
+
+
+class BookSummary(Booking):
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Статистика брони'
+        verbose_name_plural = 'Статистка бронирования'
 
 

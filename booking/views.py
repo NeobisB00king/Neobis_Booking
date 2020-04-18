@@ -56,7 +56,7 @@ class BookingDetailsView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        model = self.queryset.all() #Booking model
+        model = self.queryset.all()  # Booking model
 
         requestData = request.data
         roomName = requestData.__getitem__('room')
@@ -65,6 +65,8 @@ class BookingDetailsView(viewsets.ModelViewSet):
 
         customerEmail = requestData.__getitem__('clientEmail')
         clientName = requestData.__getitem__('clientName')
+        totalsum = request.POST.get('totalsum')
+
 
         dateFrom = datetime.datetime.strptime(dateFrom, "%Y-%m-%d").date()
 
@@ -84,7 +86,7 @@ class BookingDetailsView(viewsets.ModelViewSet):
         serializer = self.serializer_class(data=request.data)
         if re.search("^Success", str(test_for_date_validity(dateFrom, datesList))) and serializer.is_valid(raise_exception=True):
             serializer.save()
-            send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail)
+            send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail, totalsum)
             return Response({
                 'serializer': serializer.data, 
                 "Success": "The booking has been created!",
