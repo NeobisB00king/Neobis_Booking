@@ -19,17 +19,18 @@ class VolumeRoomSerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     category = CategoryRoomSerializer()
     volume = VolumeRoomSerializer()
+
     # images = RoomImagesSerializer()
 
     class Meta:
         model = Room
         fields = (
-        'id', 
-        'name', 
-        'price',
-        'category', 
-        'volume', 
-        'images'
+            'id',
+            'name',
+            'price',
+            'category',
+            'volume',
+            'images'
         )
 
 
@@ -37,22 +38,34 @@ class BookingSerializer(serializers.ModelSerializer):
     room = serializers.SlugRelatedField(
         queryset=Room.objects.all(), slug_field='name')
 
+    # totalsum = serializers.SerializerMethodField()
+    #
+    # def get_totalsum(self, request):
+    #     sum = 0
+    #     mto = Room.objects.filter(id=request.id)
+    #     for s in mto:
+    #         sum += s.price
+    #     return sum
+    # def get_totalsum(self, request):
+    #     sum = 0
+    #     mto = MealsToOrders.objects.filter(orderid=request.orderid)
+    #     for s in mto:
+    #         sum += s.count * s.mealsid.price
+    #     return sum
+
     class Meta:
         model = Booking
         fields = (
-        'id', 
-        'date_from', 
-        'date_to', 
-        'comment', 
-        'room', 
-        'has_child', 
-        'clientName', 
-        'clientSurname', 
-        'clientEmail', 
-        'clientPhone'
+            'id',
+            'date_from',
+            'date_to',
+            'comment',
+            'room',
+            'has_child',
+            'clientName',
+            'clientSurname',
+            'clientEmail',
+            'clientPhone',
+            'totalsum'
         )
-
-
-
-
-
+        read_only_fields = ['totalsum']

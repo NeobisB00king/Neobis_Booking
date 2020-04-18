@@ -76,11 +76,11 @@ def test_for_date_validity(dateFrom, datesList):
                         continue
 
 
-def send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail):
+def send_email_to_customer(clientName, roomName, dateFrom, dateTo, customerEmail, totalsum):
 
     subject = '{} спасибо за вашу бронь!'.format(clientName)
-    message = 'Ваш номер это - {}, вы забронировали с {} до {}. Приятного прибывания!'.format(
-        roomName, dateFrom, dateTo)
+    message = 'Ваш номер это - {}, вы забронировали с {} до {}. Общая стоимость = {} Приятного прибывания!'.format(
+        roomName, dateFrom, dateTo, totalsum)
     email_from = settings.EMAIL_HOST_USER
     recipient_list = []
     recipient_list.append(customerEmail)
