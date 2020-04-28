@@ -1,0 +1,81 @@
+{% extends "admin/change_list.html" %}
+{% load staticfiles %}
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script>
+        var randomColorGenerator = function () {
+            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+        };
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'left'
+            },
+            title: {
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        window.onload = function () {
+            var ctx = document.getElementById("room_category_stats-chart");
+            {% regroup cl.queryset|dictsort:"room_category_stats" by get_room_category_stats_display as room_category_stats_list %}
+            var lineChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [{% for room_category_stats in room_category_stats_list %}'{{ room_category_stats.grouper }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for room_category_stats in room_category_stats_list %}'{{ room_category_stats.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for room_category_stats in room_category_stats_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                },
+                options: options
+            });
+            var ctx = document.getElementById("book_status-chart");
+            {% regroup cl.queryset|dictsort:"book_status" by grades as book_status_list %}
+            lineChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [{% for book_status in book_status_list %}'{{ book_status.grouper }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for book_status in book_status_list %}'{{ book_status.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for book_status in book_status_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                }, options: options
+            });
+            var ctx = document.getElementById("book_pay_status-chart");
+            {% regroup cl.queryset|dictsort:"book_pay_status" by get_book_pay_status_display as book_pay_status_list %}
+            lineChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [{% for book_pay_status in book_pay_status_list %}'{{ book_pay_status.grouper }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for book_pay_status in book_pay_status_list %}'{{ book_pay_status.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for book_pay_status in book_pay_status_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                }, options: options
+            });
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    <h1> Graphs </h1>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <canvas id="room_category_stats-chart" style="width: 100px !important;"></canvas>
+        </div>
+        <div class="col-sm-4">
+            <canvas id="book_status-chart" style="width: 100px !important;"></canvas>
+        </div>
+        <div class="col-sm-4">
+            <canvas id="book_pay_status-chart" style="width: 100px !important;"></canvas>
+        </div>
+    </div>
+    {{ block.super }}
+{% endblock %}

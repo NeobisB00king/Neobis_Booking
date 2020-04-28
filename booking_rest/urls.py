@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('bookings/', BookingDetailsView.as_view({'get': 'get', 'post': 'post'}), name='bookroom',),          # Передает параметр 'id' комнаты в вьюшку
-
+    path('front/', ObjectLimitPaginationView.as_view(), name='front'),
 ]
 
 

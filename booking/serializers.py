@@ -66,6 +66,7 @@ class BookingSerializer(serializers.ModelSerializer):
             'clientSurname',
             'clientEmail',
             'clientPhone',
-            'totalsum'
+            'totalsum',
+            'date_mass'
         )
-        read_only_fields = ['totalsum']
+        read_only_fields = ['totalsum', 'date_mass']

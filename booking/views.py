@@ -17,6 +17,11 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from .functions import test_for_date_validity, send_email_to_customer
+
+
+from drf_multiple_model.pagination import MultipleModelLimitOffsetPagination
+from drf_multiple_model.views import ObjectMultipleModelAPIView
+
 # Create your views here.
 
 
@@ -102,3 +107,13 @@ class BookingDetailsView(viewsets.ModelViewSet):
             return Response({"Fail": "Unexpected error has occured!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         
+class LimitPagination(MultipleModelLimitOffsetPagination):
+    default_limit = 10
+
+
+class ObjectLimitPaginationView(ObjectMultipleModelAPIView):
+    pagination_class = LimitPagination
+    querylist = (
+        {'queryset': Room.objects.all(), 'serializer_class': RoomSerializer},
+        {'queryset': Booking.objects.all(), 'serializer_class': BookingSerializer},
+    )

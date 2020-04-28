@@ -36,18 +36,20 @@ ALLOWED_HOSTS = ['neobis-booking.herokuapp.com', '127.0.0.1', 'localhost']
 INSTALLED_APPS = [
     'jet.dashboard',
     'jet',
+    'drf_multiple_model',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'feedback',
     'booking',
     'rest_framework',
     'django_filters',
     'corsheaders',
-
+    'admin_totals',
 ]
 
 MIDDLEWARE = [
@@ -118,7 +120,7 @@ ROOT_URLCONF = 'booking_rest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
