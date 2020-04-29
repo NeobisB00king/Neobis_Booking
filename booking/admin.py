@@ -49,8 +49,11 @@ class SaleSummaryAdmin(ModelAdminTotals):
     save_on_top = True
     list_totals = [('totalsum', lambda totalsum: Coalesce(Sum(totalsum), 0))]
     # ('book_status', lambda book_status: Coalesce())]
+    #
+    # change_list_template = 'change_list.html'
 
-    # change_list_template = 'sale_summary_change_list.html'
+
+
 
     # form = YourModelForm
     # def get_next_in_date_hierarchy(self, date_hierarchy):

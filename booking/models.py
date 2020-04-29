@@ -88,12 +88,12 @@ class Booking(models.Model):
     # Online_Confirmed = 'OCO'
     # Online_Rejected = 'ORE'
 
-    book_status = models.ForeignKey(BookStatus, default='', verbose_name='Статус брони', on_delete=models.CASCADE)
+    book_status = models.ForeignKey(BookStatus, default=4, verbose_name='Статус брони', on_delete=models.CASCADE)
     book_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания брони')
     room = models.ForeignKey(Room, default='', on_delete=models.CASCADE, verbose_name='Комната')
     # Paid = 'PA'
     # Unpaid = 'UP'
-    book_pay_status = models.ForeignKey(BookPayStatus, default='', verbose_name='Статус оплаты',
+    book_pay_status = models.ForeignKey(BookPayStatus, default=2, verbose_name='Статус оплаты',
                                         on_delete=models.CASCADE)
     has_child = models.BooleanField(default=False, blank=True, verbose_name='Есть ли ребенок')
     clientName = models.CharField(max_length=64, verbose_name='Имя клиента')
